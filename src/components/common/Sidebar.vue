@@ -70,6 +70,11 @@ export default {
                 index: 'brand',
                 title: '商品品牌'
               },
+              {
+                icon: 'el-icon-share',
+                index: 'natur',
+                title: '商品属性'
+              },
             ]
         };
     },
