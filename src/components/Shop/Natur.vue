@@ -19,20 +19,17 @@
     </el-table-column>
     <el-table-column
       prop="typeId"
-      label="类型">
+      label="类型" :formatter="naturTyp">
     </el-table-column>
-    <el-table-column
-      prop="type"
-      label="展示方式">
+    <el-table-column prop="type" label="展示方式"  :formatter="leixing">
     </el-table-column>
 
     <el-table-column
-      prop="isSku"
-      label="是否为Sku属性">
+      prop="isSku" label="是否为Sku属性"  :formatter="isSku">
     </el-table-column>
     <el-table-column
       prop="isDel"
-      label="是否展示">
+      label="是否展示"  :formatter="isDel">
     </el-table-column>
     <el-table-column
       prop="createDate"
@@ -50,9 +47,10 @@
     <el-table-column
       fixed="right"
       label="操作"
-      width="100">
+    >
       <template slot-scope="scope">
         <el-button type="text" size="small" @click="toUpd(scope.$index, scope.row)">修改</el-button>
+        <el-button type="text" size="small" @click="toUpdValue(scope.$index, scope.row)">属性值修改</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -171,6 +169,35 @@
     </el-dialog>
 
 
+    <el-drawer
+      :title=title
+      :visible.sync="drawer"
+      :before-close="handleClose"
+      direction="rtl"
+      size="50%">
+
+
+      <el-table :data="valueData" width="70%">
+        <el-table-column property="valueNameE" label="英文名称" ></el-table-column>
+        <el-table-column property="valueNameCH" label="中文名称"></el-table-column>
+
+      </el-table>
+      <el-pagination
+        align="center"
+        layout="prev, pager, next"
+        :total="valueCount">
+      </el-pagination>
+
+
+    </el-drawer>
+
+
+
+
+
+
+
+
   </div>
 
 
@@ -201,10 +228,86 @@
            naturType:[],
            dialogFormVisible:false,
            natur:{},
-           updateME:false
+           updateME:false,
+           str:"",
+           parentStr:"",
+           drawer: false,
+           title:"",
+           valueData:[],
+           value:{startIndex:0,size:4,naturId:""},
+           valueCount:0
 
          }
       },methods:{
+
+        toUpdValue:function(a,b){
+          this.drawer=true;
+          this.title=b.nameCH+"设置";
+          this.value.naturId=b.naturId;
+          this.queryValueData(this.value)
+
+
+
+
+        },
+        queryValueData:function(value){
+
+          var value = new URLSearchParams(value);
+           var athis = this
+          axios.post("http://localhost:8080/api/natur/value/queryNaturValue",value).then(function (res) {
+            athis.valueData=res.data.data.data;
+          })
+
+
+
+
+
+
+        },
+
+
+
+        handleClose(done) {
+          this.$confirm('确认关闭？')
+            .then(_ => {
+              done();
+            })
+            .catch(_ => {});
+        },
+
+        leixing:function(a,b,c){
+          if(c==1){return "单选框"}
+          if(c==2){return "复选框"}
+          if(c==3){return "下拉框"}
+
+
+        },isSku:function(a,b,c){
+          if(c==1){
+            return "是"
+          }if(c==0){
+            return "否"
+          }
+
+        },isDel:function(a,b,c){
+          if(c==1){
+            return "展示"
+          }if(c==0){
+            return "不展示"
+          }
+
+
+        },naturTyp:function(a,b,c){
+          for (var i = 0; i <this.naturType.length ; i++) {
+            if(c==this.naturType[i].id){
+              return this.naturType[i].name;
+            }
+
+          }
+
+
+
+        },
+
         updateNatur:function(){
           var natur = new URLSearchParams(this.natur);
           var athis = this;
@@ -219,10 +322,6 @@
             }
 
           })
-
-
-
-
         },
         toUpd:function(a,b){
           this.updateME=true;
@@ -287,8 +386,10 @@
           var athis = this;
           axios.get("http://localhost:8080/api/natur/queryType").then(function (res) {
                athis.type=res.data.data;
+
             for (var i = 0; i <athis.type.length ; i++) {
               if(athis.type[i].pid==-1){
+
                   athis.diguiType(athis.type[i]);
 
               }
@@ -297,14 +398,31 @@
         },diguiType:function (type) {
            var isP=  this.isParent(type);
           var arr=this.type;
+
           if(isP==true){
+
             for (var i = 0; i <arr.length ; i++) {
-              if(arr[i].pid==type.id){
+              if(arr[i].pid==type.id ){
+
+                for (var j = 0; j <arr.length ; j++) {
+                  if(arr[j].id==type.pid){
+                    this.str+=arr[j].name+"/"
+                    this.str+=type.name+"/";
+                  }
+
+                }
+
                 this.diguiType(arr[i]);
               }
             }
           }else{
+
+
+            this.str+=type.name;
+            type.name=this.str;
+            this.str="分类/";
          this.naturType.push(type);
+
 
 
           }
