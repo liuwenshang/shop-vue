@@ -176,10 +176,22 @@
       direction="rtl"
       size="50%">
 
-
+      <el-button type="success" round @click="toValueAdd">属性新增</el-button>
       <el-table :data="valueData" width="70%">
         <el-table-column property="valueNameE" label="英文名称" ></el-table-column>
         <el-table-column property="valueNameCH" label="中文名称"></el-table-column>
+
+        <el-table-column
+          fixed="right"
+          label="操作"
+        >
+          <template slot-scope="scope">
+            <el-button type="text" size="small" @click="toUpdNuValue(scope.$index, scope.row)">修改</el-button>
+            <el-button type="text" size="small" @click="todelValue(scope.$index, scope.row)">删除</el-button>
+          </template>
+        </el-table-column>
+
+
 
       </el-table>
       <el-pagination
@@ -189,7 +201,57 @@
       </el-pagination>
 
 
+      <div>
+
+        <el-drawer
+          :title=innertitle
+          :append-to-body="true"
+          :before-close="handleClose"
+          :visible.sync="innerDrawer">
+
+          <div class="demo-drawer__content">
+            <el-form :model="form">
+              <el-form-item label="英文名称" >
+                <el-input v-model="form.valueNameE" autocomplete="off"></el-input>
+              </el-form-item>
+
+              <el-form-item label="中文名称" >
+                <el-input v-model="form.valueNameCH" autocomplete="off"></el-input>
+              </el-form-item>
+
+            </el-form>
+            <div class="demo-drawer__footer">
+              <el-button @click="handleClose">取 消</el-button>
+              <el-button type="primary" @click="saveNaturValue">提交</el-button>
+            </div>
+          </div>
+        </el-drawer>
+      </div>
     </el-drawer>
+
+    <el-dialog title="属性修改" :visible.sync="updateValue"  :before-close="handleClose">
+      <el-form :model="updForm">
+        <el-form-item label="英文名称" >
+          <el-input v-model="updForm.valueNameE" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="中文名称" >
+          <el-input v-model="updForm.valueNameCH" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button @click="updateME = false">取 消</el-button>
+          <el-button type="primary" @click="updateNaturValue">确 定</el-button>
+        </el-form-item>
+      </el-form>
+
+
+
+
+
+
+
+    </el-dialog>
 
 
 
@@ -235,19 +297,80 @@
            title:"",
            valueData:[],
            value:{startIndex:0,size:4,naturId:""},
-           valueCount:0
-
+           valueCount:0,
+           innerDrawer:false,
+           innertitle:"",
+           form:{naturId:""},
+           updForm:{valueId:"",naturId:""},
+           updateValue:false
          }
       },methods:{
+
+        todelValue:function(a,b){
+          axios.delete("http://localhost:8080/api/natur/value/updNaturValue")
+
+
+
+
+        },
+
+        toUpdNuValue:function(a,b){
+          this.updateValue=true;
+          this.updForm=b;
+
+
+
+        },
+        updateNaturValue:function(){
+          var naturValue=new URLSearchParams(this.updForm);
+          var athis = this;
+          axios.post("http://localhost:8080/api/natur/value/updNaturValue",naturValue).then(function (res) {
+            if(res.data.code==200){
+              athis.$message("修改成功！")
+              athis.updateValue=false;
+              athis.updForm={};
+              athis.queryValueData(athis.value)
+
+            }
+
+          })
+
+        },
+
+        saveNaturValue:function(){
+          this.form.naturId=this.value.naturId
+          var naturValue=new URLSearchParams(this.form);
+          var athis = this;
+          axios.post("http://localhost:8080/api/natur/value/saveNaturValue",naturValue).then(function (res) {
+            if(res.data.code==200){
+              athis.$message("新增成功！")
+              athis.innerDrawer=false;
+              athis.form={};
+              athis.queryValueData(athis.value)
+
+            }
+
+          })
+
+
+
+
+
+        },
+
+        toValueAdd:function(){
+          this.innerDrawer=true;
+          this.innertitle=this.title;
+        },
+
+
+
 
         toUpdValue:function(a,b){
           this.drawer=true;
           this.title=b.nameCH+"设置";
           this.value.naturId=b.naturId;
           this.queryValueData(this.value)
-
-
-
 
         },
         queryValueData:function(value){
