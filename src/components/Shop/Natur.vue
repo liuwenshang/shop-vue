@@ -307,7 +307,13 @@
       },methods:{
 
         todelValue:function(a,b){
-          axios.delete("http://localhost:8080/api/natur/value/updNaturValue")
+          var  athis = this
+          axios.delete("http://localhost:8080/api/natur/value/delNaturValue?valueId="+b.valueId).then(function (res) {
+           if(res.data.code==200){
+              athis.$message("删除成功！")
+           }
+
+          })
 
 
 
