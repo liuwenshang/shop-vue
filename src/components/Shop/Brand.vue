@@ -42,6 +42,12 @@
       <el-table-column
         prop="logo"
         label="品牌商标">
+        <template slot-scope="scorp">
+          <img :src="scorp.row.logo" style= "width: 50px;">
+        </template>
+
+
+
       </el-table-column>
 
       <el-table-column
@@ -185,7 +191,7 @@
 
         toUpd:function(index,row){
           this.dialogFormVisible=true;
-          this.imageUrl="http://"+row.logo;
+          this.imageUrl=row.logo;
             this.brand=row;
 
         },

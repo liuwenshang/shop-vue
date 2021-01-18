@@ -176,6 +176,7 @@
       direction="rtl"
       size="50%">
 
+
       <el-button type="success" round @click="toValueAdd">属性新增</el-button>
       <el-table :data="valueData" width="70%">
         <el-table-column property="valueNameE" label="英文名称" ></el-table-column>
@@ -302,10 +303,9 @@
            innertitle:"",
            form:{naturId:""},
            updForm:{valueId:"",naturId:""},
-           updateValue:false
+           updateValue:false,
          }
       },methods:{
-
         todelValue:function(a,b){
           var  athis = this
           axios.delete("http://localhost:8080/api/natur/value/delNaturValue?valueId="+b.valueId).then(function (res) {
