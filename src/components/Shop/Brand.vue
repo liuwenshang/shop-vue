@@ -45,9 +45,6 @@
         <template slot-scope="scorp">
           <img :src="scorp.row.logo" style= "width: 50px;">
         </template>
-
-
-
       </el-table-column>
 
       <el-table-column
@@ -205,12 +202,12 @@
           this.brandVo={};
         },
 
-        onSubmit:function(){
-          this.brandVo.startIndex= (this.page-1)*this.size;
-          this.brandVo.size=this.size
-          this.queryBrand(this.brandVo);
+      onSubmit:function(){
+        this.brandVo.startIndex= (this.page-1)*this.size;
+        this.brandVo.size=this.size
+        this.queryBrand(this.brandVo);
 
-        },
+      },
         handleAvatarSuccess(res, file) {
           this.imageUrl = URL.createObjectURL(file.raw);
           this.brand.logo=file.response.filePath;

@@ -78,6 +78,10 @@ export default {
                 icon:'el-icon-goods',
                 index: 'goodsAdd',
                 title: '添加商品'
+              },{
+                icon:'el-icon-s-management',
+                index: 'goods',
+                title: '商品展示'
               },
             ]
         };

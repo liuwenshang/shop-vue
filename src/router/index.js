@@ -37,6 +37,11 @@ export default new Router({
           path: '/goodsAdd',
           component: () => import(/* webpackChunkName: "dashboard" */ '../components/Shop/GoodsAdd'),
           meta: { title: '添加商品' }
+        },
+        {
+          path: '/goods',
+          component: () => import(/* webpackChunkName: "dashboard" */ '../components/Shop/Goods'),
+          meta: { title: '商品展示' }
         }
       ]
     }

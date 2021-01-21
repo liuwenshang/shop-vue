@@ -112,7 +112,7 @@
 
 
         <el-form-item label="商品参数"  v-if="naturData.length>0" >
-          <el-form-item v-for="a in  naturData" :key="a.naturId" :label="a.nameCH">
+          <el-form-item v-for="a  in  naturData" :key="a.naturId" :label="a.nameCH">
             <template slot-scope="scope">
 
             <el-select v-if="a.type==3 "  placeholder="请选择" v-model="a.cks">
@@ -125,7 +125,7 @@
 
 
             <el-checkbox-group  v-if="a.type==2 " v-model="a.cks">
-              <el-checkbox v-for="b in a.valueData" :key="b.valueId" :label="b.valueNameCH" name="type" :prop="b.valueNameE"></el-checkbox>
+              <el-checkbox v-for="b in a.valueData" :key="b.valueId" :label="b.valueNameCH"  :prop="b.valueNameE"></el-checkbox>
             </el-checkbox-group>
             </template>
           </el-form-item>
@@ -152,6 +152,7 @@
         name: "GoodsAdd",
       data(){
        return {
+
          path:"/goodsAttr",
          active:0,
          goods:{},
@@ -189,6 +190,7 @@
           this.goods.typeId=this.goodsAttr.typeId;
           var naturJson={};
           for (var i = 0; i <this.naturData.length ; i++) {
+
                naturJson[this.naturData[i].natruNameE]=this.naturData[i].cks;
           }
           this.goods.skuDataTable=JSON.stringify(this.skuDataTable);
@@ -292,7 +294,6 @@
                 break;
               }
             }
-
           }else{
             this.typeName+="/"+node.name;
           }
@@ -323,7 +324,7 @@
                  athis.naturData=[];
                  athis.skuData=[];
             for (var i = 0; i <athis.naturDatas.length ; i++) {
-              athis.naturDatas[i].cks=(athis.cks);
+              athis.naturDatas[i].cks=athis.cks;
               if(athis.naturDatas[i].isSku==1){
                     athis.skuData.push(athis.naturDatas[i]);
               }else{
@@ -363,6 +364,7 @@
             this.colData=[];
             var flag=true;
 
+
             for (var i = 0; i <val.length ; i++) {
               if(val[i].cks.length==0){
                 flag=false;
@@ -373,6 +375,7 @@
               this.cksData=val;
 
               for (var i = 0; i <val.length ; i++) {
+
                   this.colData.push(val[i].cks)
               }
 
