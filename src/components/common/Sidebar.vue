@@ -74,6 +74,10 @@ export default {
                 icon: 'el-icon-share',
                 index: 'natur',
                 title: '商品属性'
+              },{
+                icon:'el-icon-goods',
+                index: 'goodsAdd',
+                title: '添加商品'
               },
             ]
         };

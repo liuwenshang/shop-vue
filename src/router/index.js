@@ -32,6 +32,11 @@ export default new Router({
           path: '/natur',
           component: () => import(/* webpackChunkName: "dashboard" */ '../components/Shop/Natur'),
           meta: { title: '商品属性' }
+        },
+        {
+          path: '/goodsAdd',
+          component: () => import(/* webpackChunkName: "dashboard" */ '../components/Shop/GoodsAdd'),
+          meta: { title: '添加商品' }
         }
       ]
     }

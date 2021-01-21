@@ -104,7 +104,7 @@
           <el-form-item label="是否为sku" >
             <el-radio-group v-model="natur.isSku">
               <el-radio :label="1">是</el-radio>
-              <el-radio :label="2">否</el-radio>
+              <el-radio :label="0">否</el-radio>
             </el-radio-group>
           </el-form-item>
 
@@ -156,7 +156,7 @@
         <el-form-item label="是否为sku" >
           <el-radio-group v-model="natur.isSku">
             <el-radio :label="1">是</el-radio>
-            <el-radio :label="2">否</el-radio>
+            <el-radio :label="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -529,21 +529,18 @@
           var arr=this.type;
 
           if(isP==true){
-
-            for (var i = 0; i <arr.length ; i++) {
-              if(arr[i].pid==type.id ){
-
-                for (var j = 0; j <arr.length ; j++) {
-                  if(arr[j].id==type.pid){
-                    this.str+=arr[j].name+"/"
-                    this.str+=type.name+"/";
+              for (var i = 0; i <arr.length ; i++) {
+                if(arr[i].pid==type.id ){
+                  for (var j = 0; j <arr.length ; j++) {
+                    var a  =arr[j];
+                    if(a.id==arr[i].pid){
+                      this.str+=a.name+"/";
+                    }
                   }
-
+                  this.diguiType(arr[i]);
                 }
-
-                this.diguiType(arr[i]);
               }
-            }
+
           }else{
 
 
