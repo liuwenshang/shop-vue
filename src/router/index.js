@@ -3,11 +3,25 @@ import Router from 'vue-router';
 
 Vue.use(Router);
 
+
+//const routes = [{
+//         path: '/',
+//         redirect: '/login'
+//     },
+//     {
+//         path: '/login',
+//         component: Login
+//     }
+// ]
 export default new Router({
   routes: [
     {
+      path: '/login',
+      component: () => import('../components/Login.vue'),
+    },
+    {
       path: '/',
-      redirect: '/dashboard'
+      redirect: '/login'
     },
     {
       path: '/',

@@ -269,7 +269,8 @@
           axios.post("http://localhost:8080/api/natur/queryNatur",naturVo).then(function (res) {
             athis.tableData=res.data.data.data;
           })
-        },formaterTypeData:function () {
+        },
+        formaterTypeData:function () {
           var athis = this;
           axios.get("http://localhost:8080/api/natur/queryType").then(function (res) {
             athis.ajaxTypeData=res.data.data;
@@ -284,7 +285,8 @@
               athis.types[i].name=athis.typeName.split("/").reverse().join("/").substring(0,athis.typeName.length-1);
             }
           })
-        },chandleName:function(node){
+        },
+        chandleName:function(node){
           if(node.pid!=0){ //临界值
             this.typeName+="/"+node.name;
             //上级节点

@@ -461,12 +461,12 @@
         handleSizeChange:function(size){
           this.naturVo.size=size;
           this.naturVo.startIndex= (this.page-1)*this.size;
-          this.queryBrand(this.naturVo);
+          this.queryNatur(this.naturVo);
 
         },handleCurrentChange:function(page){
           this.naturVo.size=this.size;
           this.naturVo.startIndex= (page-1)*this.size;
-          this.queryBrand(this.naturVo);
+          this.queryNatur(this.naturVo);
 
         },
       tableRowClassName({row, rowIndex}) {
@@ -509,6 +509,7 @@
           var naturVo  =new URLSearchParams(naturVo)
          axios.post("http://localhost:8080/api/natur/queryNatur",naturVo).then(function (res) {
            athis.tableData=res.data.data.data;
+           athis.count=res.data.data.count;
          })
         },
         queryType:function () {
