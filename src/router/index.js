@@ -56,6 +56,11 @@ export default new Router({
           path: '/goods',
           component: () => import(/* webpackChunkName: "dashboard" */ '../components/Shop/Goods'),
           meta: { title: '商品展示' }
+        },
+        {
+          path: '/permission',
+          component: () => import(/* webpackChunkName: "dashboard" */ '../components/mune/Permission'),
+          meta: { title: '角色权限' }
         }
       ]
     }

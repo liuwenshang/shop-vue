@@ -82,7 +82,11 @@ export default {
                 icon:'el-icon-s-management',
                 index: 'goods',
                 title: '商品展示'
-              },
+              },{
+                icon: 'el-icon-link',
+                index: 'permission',
+                title: '角色权限'
+              }
             ]
         };
     },

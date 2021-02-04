@@ -146,7 +146,8 @@ export default {
                 this.$message("密码错误!")
               }
               if(res.data.code==200){
-                this.$message("登录成功！")
+                this.$message("登录成功！");
+                this.$router.push("dashboard")
               }
 
             });
