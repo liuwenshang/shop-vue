@@ -86,6 +86,10 @@ export default {
                 icon: 'el-icon-link',
                 index: 'permission',
                 title: '角色权限'
+              },{
+                icon: 'el-icon-s-check',
+                index: 'role',
+                title: '用户角色'
               }
             ]
         };

@@ -5,6 +5,8 @@
     <TypeUpd v-if="updShow" :uid="uid" :key="da" ></TypeUpd>
 
     <div class="block">
+
+
       <el-tree
         :data="data"
         node-key="id"

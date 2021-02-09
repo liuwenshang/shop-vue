@@ -1,35 +1,20 @@
 <template>
   <div>
-    <el-button  size="small" @click="toAdd">新增</el-button>
-    <el-table
-      :data="tableData"
-      style="width: 100%">
-      <el-table-column
-        prop="permissionName"
-        label="权限名称"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="url"
-        label="跳转路径"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="perType"
-        :formatter="perType"
-        label="权限类型">
-      </el-table-column>
 
-      <el-table-column
-        fixed="right"
-        label="操作"
-      >
-        <template slot-scope="scope">
-          <el-button type="text" size="small" @click="toUpd(scope.$index, scope.row)">修改</el-button>
-          <el-button type="text" size="small" @click="delP(scope.$index, scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-tree
+      :data="data"
+      node-key="id"
+      :expand-on-click-node="false"
+    >
+      <span class="custom-tree-node" slot-scope="{node, data}">
+        <span>{{ node.label }}</span>
+        <span>
+           <el-button type="danger" size="mini" icon="el-icon-folder-add" circle @click="toAdd(node, data)" ></el-button>
+          <el-button type="danger" size="mini" icon="el-icon-set-up" circle @click="update(node, data)" ></el-button>
+
+        </span>
+      </span>
+    </el-tree>
 
 
     <el-dialog title="权限新增" :visible.sync="showForm "  :before-close="handleClose">
@@ -80,7 +65,12 @@
           return{
             tableData:[],
             showForm:false,
-            permission:{}
+            permission:{},
+            data:[],
+            jsonStr:"",
+            ajaxData:[],
+            nodeData:{}
+
           }
       },methods:{
         delP:function(a,b){
@@ -98,9 +88,13 @@
 
 
 
-        toUpd:function(a,b){
-          this.permission=b;
+        update:function(a,b){
           this.showForm=true;
+         var permissionId=b.id;
+         axios.get("http://localhost:8080/api/per/queryByPid?permissionId="+permissionId).then(res=>{
+           this.permission=res.data.data;
+
+         })
 
         },
         perType:function (a,b,c) {
@@ -112,17 +106,74 @@
             }
           },queryPermission:function () {
         axios.get("http://localhost:8080/api/per/queryPermission").then(res=>{
-          this.tableData=res.data.data;
+          this.ajaxData=res.data.data;
+          this.formater();
 
         })
 
           
+        },formater:function () {
+          var arr = this.ajaxData;
+          for (var i = 0; i <arr.length; i++) {
+            if(arr[i].pId==0){
+              var node=arr[i];
+              this.dataFor(node);
+              break;
+            }
+
+
+          }
+          this.data.push(JSON.parse(this.jsonStr));
+
+
+
+        },dataFor:function (node) {
+          var isP= this.isParent(node);
+          if(isP==true){
+            this.jsonStr+='{"id":'+node.permissionId+',"label":"'+node.permissionName+'","children":[';
+            var count = 0;
+            for (var i = 0; i <this.ajaxData.length ; i++) {
+              if(node.permissionId==this.ajaxData[i].pId){
+                count++;
+                this.dataFor(this.ajaxData[i]);
+                this.jsonStr+=",";
+
+              }
+            }
+
+
+            if(count!=0){
+              this.jsonStr=this.jsonStr.substr(0,this.jsonStr.length-1);
+
+            }
+            this.jsonStr+=']}';
+
+          }else {
+            this.jsonStr+='{"id":'+node.permissionId+',"label":"'+node.permissionName+'"}';
+
+
+          }
+
+
+        },isParent:function (node) {
+          for (var  i = 0; i <this.ajaxData.length ; i++) {
+            if(node.permissionId==this.ajaxData[i].pId){
+
+              return true;
+            }
+          }
+
+          return false;
+
+
         },closeShow:function(){
             this.showForm=false;
             this.permission={};
 
-        },toAdd:function () {
+        },toAdd:function (a,b) {
             this.showForm=true;
+            this.permission.pId=a.data.id;
+
 
         }, handleClose(done) {
           this.$confirm('确认关闭？')
@@ -138,7 +189,7 @@
               if(res.data.code==200){
                 this.$message("新增成功！");
                 this.closeShow();
-                this.queryPermission();
+                location.reload();
               }
 
             })
@@ -149,20 +200,11 @@
               if(res.data.code==200){
                 this.$message("修改成功！");
                 this.closeShow();
-                this.queryPermission();
+               location.reload();
               }
 
             })
-
-
           }
-
-
-
-
-
-
-          
         }
       },created:function () {
         this.queryPermission();

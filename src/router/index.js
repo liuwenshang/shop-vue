@@ -61,6 +61,11 @@ export default new Router({
           path: '/permission',
           component: () => import(/* webpackChunkName: "dashboard" */ '../components/mune/Permission'),
           meta: { title: '角色权限' }
+        },
+        {
+          path: '/role',
+          component: () => import(/* webpackChunkName: "dashboard" */ '../components/mune/Role'),
+          meta: { title: '用户角色' }
         }
       ]
     }
