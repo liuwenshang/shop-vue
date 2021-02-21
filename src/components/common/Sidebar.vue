@@ -90,6 +90,10 @@ export default {
                 icon: 'el-icon-s-check',
                 index: 'role',
                 title: '用户角色'
+              },{
+                icon: "el-icon-user-solid",
+                index: 'user',
+                title: '用户信息'
               }
             ]
         };

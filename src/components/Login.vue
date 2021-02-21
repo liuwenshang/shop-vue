@@ -197,7 +197,7 @@ export default {
 
       handleAvatarSuccess(res, file) {
         this.imageUrl = URL.createObjectURL(file.raw);
-        this.user.imageUrl=file.response.filePath;
+        this.user.imgUrl=file.response.filePath;
       },
       beforeAvatarUpload(file) {
         const isJPG = file.type === 'image/jpeg';
